@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>DARK THILA BOT</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Inter:wght@300;400;600&display=swap');
+
+    :root {
+      --purple: #7c3aed;
+      --purple-glow: rgba(124,58,237,.4);
+      --cyan: #06b6d4;
+      --green: #10b981;
+      --red: #ef4444;
+      --bg: #09090b;
+      --card: rgba(255,255,255,.04);
+      --border: rgba(124,58,237,.25);
+      --text: #e4e4e7;
+      --muted: #71717a;
+    }
+
+    * { margin:0; padding:0; box-sizing:border-box; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      background-image:
+        radial-gradient(ellipse at 15% 40%, rgba(124,58,237,.12) 0%, transparent 55%),
+        radial-gradient(ellipse at 85% 20%, rgba(6,182,212,.08) 0%, transparent 55%);
+    }
+
+    .wrap { width: 100%; max-width: 440px; }
+
+    /* ── HEADER ── */
+    .header { text-align: center; margin-bottom: 28px; }
+
+    .avatar {
+      width: 96px; height: 96px;
+      border-radius: 50%;
+      border: 3px solid var(--purple);
+      box-shadow: 0 0 32px var(--purple-glow), 0 0 64px rgba(124,58,237,.2);
+      object-fit: cover;
+      display: block;
+      margin: 0 auto 16px;
+      animation: glow 3s ease-in-out infinite;
+    }
+    @keyframes glow {
+      0%,100% { box-shadow: 0 0 32px var(--purple-glow); }
+      50%      { box-shadow: 0 0 52px rgba(124,58,237,.7), 0 0 80px rgba(124,58,237,.3); }
+    }
+
+    h1 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 2rem;
+      font-weight: 900;
+      letter-spacing: 4px;
+      background: linear-gradient(135deg, var(--purple), var(--cyan));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .tagline { color: var(--muted); font-size: .82rem; letter-spacing: 3px; margin-top: 4px; }
+
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 14px;
+      padding: 6px 18px;
+      border-radius: 999px;
+      font-family: 'Orbitron', sans-serif;
+      font-size: .68rem;
+      letter-spacing: 2px;
+      border: 1px solid currentColor;
+      transition: all .3s;
+    }
+    .dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: currentColor;
+      animation: blink 1.4s infinite;
+    }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.3} }
+
+    /* ── CARD ── */
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 28px;
+      backdrop-filter: blur(16px);
+      margin-bottom: 16px;
+      position: relative;
+      overflow: hidden;
+    }
+    .card::before {
+      content: '';
+      position: absolute;
+      inset: 0 0 auto;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--purple), transparent);
+    }
+
+    /* ── CONNECTION BOX ── */
+    .conn-box {
+      min-height: 240px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      border: 1px dashed rgba(255,255,255,.1);
+      border-radius: 14px;
+      padding: 24px;
+      gap: 14px;
+      text-align: center;
+    }
+
+    .qr-img {
+      width: 200px; height: 200px;
+      border-radius: 12px;
+      border: 3px solid var(--purple);
+      padding: 8px;
+      background: #fff;
+    }
+
+    .spinner {
+      width: 44px; height: 44px;
+      border: 3px solid rgba(124,58,237,.2);
+      border-top-color: var(--purple);
+      border-radius: 50%;
+      animation: spin .9s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .conn-label { font-size: .78rem; color: var(--muted); }
+
+    /* pairing code display */
+    .code-box {
+      background: rgba(0,0,0,.4);
+      border: 2px solid var(--purple);
+      border-radius: 14px;
+      padding: 20px 24px;
+      position: relative;
+    }
+    .code-label { font-size: .68rem; color: var(--purple); letter-spacing: 3px; font-family:'Orbitron',sans-serif; margin-bottom: 10px; }
+    .code-value { font-family: 'Orbitron', sans-serif; font-size: 2.4rem; letter-spacing: 8px; color: #fff; }
+    .copy-btn {
+      position: absolute; top: 50%; right: 14px; transform: translateY(-50%);
+      background: rgba(124,58,237,.2);
+      border: 1px solid var(--purple);
+      color: var(--text);
+      padding: 8px 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: .75rem;
+      transition: all .2s;
+    }
+    .copy-btn:hover { background: rgba(124,58,237,.5); }
+
+    /* ── DIVIDER ── */
+    .divider {
+      display: flex; align-items: center; gap: 12px;
+      color: var(--muted); font-size: .72rem; letter-spacing: 2px;
+      margin: 22px 0;
+    }
+    .divider::before, .divider::after { content:''; flex:1; height:1px; background: rgba(255,255,255,.08); }
+
+    /* ── INPUT ── */
+    .input-wrap { display: flex; gap: 10px; margin-bottom: 12px; }
+
+    input[type=text] {
+      flex: 1;
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: 10px;
+      padding: 12px 16px;
+      color: var(--text);
+      font-size: 1rem;
+      outline: none;
+      transition: border-color .2s;
+      font-family: 'Inter', sans-serif;
+    }
+    input[type=text]:focus { border-color: var(--purple); }
+    input[type=text]::placeholder { color: var(--muted); }
+
+    .btn {
+      padding: 12px 20px;
+      background: linear-gradient(135deg, var(--purple), #4f46e5);
+      border: none;
+      border-radius: 10px;
+      color: #fff;
+      font-family: 'Orbitron', sans-serif;
+      font-size: .68rem;
+      letter-spacing: 1px;
+      cursor: pointer;
+      transition: all .2s;
+      white-space: nowrap;
+    }
+    .btn:hover { transform: translateY(-2px); box-shadow: 0 8px 24px var(--purple-glow); }
+    .btn:disabled { opacity: .5; cursor: not-allowed; transform: none; }
+
+    /* ── ALERT ── */
+    .alert {
+      border-radius: 10px;
+      padding: 12px 16px;
+      font-size: .84rem;
+      display: none;
+      margin-top: 12px;
+    }
+    .alert.ok  { background: rgba(16,185,129,.1); border: 1px solid var(--green); color: var(--green); }
+    .alert.err { background: rgba(239,68,68,.1);  border: 1px solid var(--red);   color: var(--red); }
+
+    /* ── HINT ── */
+    .hint {
+      background: rgba(124,58,237,.07);
+      border: 1px solid rgba(124,58,237,.15);
+      border-radius: 10px;
+      padding: 12px 14px;
+      font-size: .76rem;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    /* ── FEATURES ── */
+    .features { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .feat {
+      background: rgba(124,58,237,.06);
+      border: 1px solid rgba(124,58,237,.15);
+      border-radius: 10px;
+      padding: 14px;
+      font-size: .8rem;
+    }
+    .feat-icon { font-size: 1.4rem; margin-bottom: 6px; }
+    .feat-cmd  { color: var(--purple); font-weight: 600; font-size: .85rem; }
+    .feat-desc { color: var(--muted); font-size: .72rem; margin-top: 2px; }
+
+    footer { color: var(--muted); font-size: .68rem; letter-spacing: 2px; text-align: center; margin-top: 8px; }
+
+    /* connected state */
+    .connected-icon {
+      width: 64px; height: 64px;
+      border-radius: 50%;
+      background: rgba(16,185,129,.15);
+      border: 2px solid var(--green);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 2rem;
+    }
+
+    /* instructions */
+    .steps { list-style: none; }
+    .steps li {
+      display: flex; gap: 12px; align-items: flex-start;
+      font-size: .8rem; color: var(--muted);
+      padding: 6px 0; border-bottom: 1px solid rgba(255,255,255,.04);
+    }
+    .steps li:last-child { border-bottom: none; }
+    .step-num {
+      width: 22px; height: 22px; border-radius: 50%;
+      background: rgba(124,58,237,.25);
+      color: var(--purple); font-weight: 700; font-size: .7rem;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; margin-top: 1px;
+    }
+  </style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- HEADER -->
+  <div class="header">
+    <img src="https://files.catbox.moe/fi38yw.jpg" alt="DARK THILA" class="avatar" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><circle cx=%2250%22 cy=%2250%22 r=%2250%22 fill=%22%237c3aed%22/><text x=%2250%22 y=%2265%22 font-size=%2240%22 text-anchor=%22middle%22 fill=%22white%22>🌑</text></svg>'"/>
+    <h1>DARK THILA</h1>
+    <div class="tagline">WHATSAPP MULTI-DEVICE BOT</div>
+    <div id="statusPill" class="status-pill" style="color:var(--red)">
+      <span class="dot"></span>
+      <span id="statusText">DISCONNECTED</span>
+    </div>
+  </div>
+
+  <!-- MAIN CARD -->
+  <div class="card">
+
+    <!-- Connection display area -->
+    <div class="conn-box" id="connBox">
+      <div class="spinner"></div>
+      <div class="conn-label">Initializing...</div>
+    </div>
+
+    <!-- Pairing input (hidden when connected) -->
+    <div id="pairSection">
+      <div class="divider">OR USE PAIRING CODE</div>
+      <div class="input-wrap">
+        <input type="text" id="phoneInput" placeholder="94771234567 (no + or spaces)" maxlength="15"/>
+        <button class="btn" id="pairBtn" onclick="requestPair()">PAIR</button>
+      </div>
+      <div class="alert" id="alertBox"></div>
+      <div class="hint" style="margin-top:12px">
+        🔐 Enter phone with country code — no <strong>+</strong> or spaces.<br>
+        🇱🇰 Sri Lanka: <strong>94XXXXXXXXX</strong> &nbsp;|&nbsp; 🇮🇳 India: <strong>91XXXXXXXXXX</strong>
+      </div>
+    </div>
+  </div>
+
+  <!-- HOW TO USE (pairing code) -->
+  <div class="card" id="howToCard" style="display:none">
+    <p style="font-family:'Orbitron',sans-serif;font-size:.7rem;letter-spacing:2px;color:var(--purple);margin-bottom:14px">HOW TO LINK</p>
+    <ul class="steps">
+      <li><div class="step-num">1</div><div>Open WhatsApp on your phone</div></li>
+      <li><div class="step-num">2</div><div>Go to <strong>Settings → Linked Devices → Link a Device</strong></div></li>
+      <li><div class="step-num">3</div><div>Tap <strong>"Link with phone number instead"</strong></div></li>
+      <li><div class="step-num">4</div><div>Enter the 8-digit code shown above</div></li>
+    </ul>
+  </div>
+
+  <!-- FEATURES -->
+  <div class="card">
+    <p style="font-family:'Orbitron',sans-serif;font-size:.7rem;letter-spacing:2px;color:var(--purple);margin-bottom:14px">BOT COMMANDS</p>
+    <div class="features">
+      <div class="feat">
+        <div class="feat-icon">🎵</div>
+        <div class="feat-cmd">.song [name]</div>
+        <div class="feat-desc">Search & download audio</div>
+      </div>
+      <div class="feat">
+        <div class="feat-icon">📱</div>
+        <div class="feat-cmd">.tiktok [link]</div>
+        <div class="feat-desc">Download TikTok video</div>
+      </div>
+      <div class="feat">
+        <div class="feat-icon">📘</div>
+        <div class="feat-cmd">.fb [link]</div>
+        <div class="feat-desc">Download Facebook video</div>
+      </div>
+      <div class="feat">
+        <div class="feat-icon">📋</div>
+        <div class="feat-cmd">.menu</div>
+        <div class="feat-desc">Show command list</div>
+      </div>
+    </div>
+  </div>
+
+  <footer>DARK THILA BOT &copy; 2025 &nbsp;•&nbsp; POWERED BY BAILEYS</footer>
+</div>
+
+<script>
+const BOT_LOGO = 'https://files.catbox.moe/fi38yw.jpg';
+let currentCode = null;
+let pollInterval = null;
+
+// ── Poll status every 2.5s ──────────────────────────────────────
+function startPolling() {
+  pollStatus();
+  pollInterval = setInterval(pollStatus, 2500);
+}
+
+async function pollStatus() {
+  try {
+    const [statusRes, qrRes] = await Promise.all([
+      fetch('/api/status').then(r => r.json()),
+      fetch('/api/qr').then(r => r.json()),
+    ]);
+
+    updateStatus(statusRes.connected, qrRes.qr, statusRes.pairCode);
+  } catch(e) {}
+}
+
+function updateStatus(connected, qrUrl, pairCode) {
+  const pill     = document.getElementById('statusPill');
+  const pillText = document.getElementById('statusText');
+  const box      = document.getElementById('connBox');
+  const pairSec  = document.getElementById('pairSection');
+  const howTo    = document.getElementById('howToCard');
+
+  if (connected) {
+    pill.style.color = 'var(--green)';
+    pillText.textContent = 'CONNECTED';
+    box.innerHTML = `
+      <div class="connected-icon">✅</div>
+      <div style="font-weight:700;color:var(--green);font-size:1.1rem">Connected!</div>
+      <div class="conn-label">Bot is online and ready. Send .menu to your bot number.</div>
+    `;
+    pairSec.style.display = 'none';
+    howTo.style.display = 'none';
+    return;
+  }
+
+  pill.style.color = 'var(--red)';
+  pillText.textContent = 'WAITING...';
+
+  // Show pairing code if available
+  if (currentCode && currentCode !== 'ALREADY_CONNECTED') {
+    box.innerHTML = `
+      <div class="code-box" style="width:100%;text-align:center">
+        <div class="code-label">PAIRING CODE</div>
+        <div class="code-value" id="codeVal">${currentCode}</div>
+        <button class="copy-btn" onclick="copyCode()">COPY</button>
+      </div>
+      <div class="conn-label" style="font-size:.75rem">Enter this code in WhatsApp (see steps below)</div>
+    `;
+    howTo.style.display = 'block';
+    return;
+  }
+
+  // Show QR if available
+  if (qrUrl) {
+    pill.style.color = 'var(--cyan)';
+    pillText.textContent = 'SCAN QR';
+    box.innerHTML = `
+      <img src="${qrUrl}" class="qr-img" alt="QR Code"/>
+      <div class="conn-label">Scan with WhatsApp → Settings → Linked Devices → Link a Device</div>
+    `;
+    return;
+  }
+
+  // Loading
+  box.innerHTML = `
+    <div class="spinner"></div>
+    <div class="conn-label">Connecting to WhatsApp...</div>
+  `;
+}
+
+// ── Request pairing code ────────────────────────────────────────
+async function requestPair() {
+  const phone = document.getElementById('phoneInput').value.trim();
+  const btn   = document.getElementById('pairBtn');
+  const alert = document.getElementById('alertBox');
+
+  if (!phone) return showAlert('Enter your phone number first.', 'err');
+
+  btn.disabled = true;
+  btn.textContent = 'WAIT...';
+  showAlert('⏳ Requesting code... (up to 10 seconds)', 'ok');
+  currentCode = null;
+
+  try {
+    const res  = await fetch('/api/pair', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ phone }),
+    });
+    const data = await res.json();
+
+    if (data.error) {
+      showAlert('❌ ' + data.error, 'err');
+    } else if (data.code === 'ALREADY_CONNECTED') {
+      showAlert('✅ Already connected!', 'ok');
+    } else {
+      currentCode = data.code;
+      showAlert('✅ Code ready! Enter it in WhatsApp.', 'ok');
+      pollStatus();
+    }
+  } catch(e) {
+    showAlert('❌ Network error. Try again.', 'err');
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'PAIR';
+  }
+}
+
+function showAlert(msg, type) {
+  const el = document.getElementById('alertBox');
+  el.textContent = msg;
+  el.className = 'alert ' + type;
+  el.style.display = 'block';
+}
+
+function copyCode() {
+  const code = document.getElementById('codeVal')?.textContent;
+  if (!code) return;
+  navigator.clipboard.writeText(code).then(() => {
+    document.querySelector('.copy-btn').textContent = '✅';
+    setTimeout(() => document.querySelector('.copy-btn').textContent = 'COPY', 2000);
+  });
+}
+
+// Enter key support
+document.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('phoneInput').addEventListener('keydown', e => {
+    if (e.key === 'Enter') requestPair();
+  });
+  startPolling();
+});
+</script>
+</body>
+</html>
