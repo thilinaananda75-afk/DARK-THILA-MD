@@ -1,0 +1,6 @@
+node_modules/
+session/
+*.mp3
+*.mp4
+.env
+.DS_Store
